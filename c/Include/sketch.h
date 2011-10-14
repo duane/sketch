@@ -32,6 +32,10 @@ typedef struct {
   void *implData;
 } Drawable;
 
+typedef struct {
+  double v1, v2, v3, a;
+} Color;
+
 typedef struct SketchContext {
   Drawable *drawable;
   void (*setup)(struct SketchContext*);
@@ -41,6 +45,8 @@ typedef struct SketchContext {
   uint32_t ellipseMode, rectMode; 
   
   bool fill, stroke;
+
+  Color strokeColor, fillColor;
 } SketchContext;
 
 extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, uint32_t height, void (*setup)(SketchContext*), void (*draw)(SketchContext*));
@@ -66,9 +72,7 @@ extern void noSmooth(SketchContext *ctx);
 
 extern void background(SketchContext *ctx, double v1, double v2, double v3);
 
-
 extern void doSetup(SketchContext *ctx);
-
 
 static inline double min(double a, double b) {
   return a < b ? a : b;

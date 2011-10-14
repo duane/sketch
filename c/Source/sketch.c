@@ -51,11 +51,26 @@ extern void bezier(SketchContext *ctx, double x1, double y1, double cx1, double 
 
 extern void fill(SketchContext *ctx, double v1, double v2, double v3) {
   ctx->fill = true;
+  v1 = constrain(v1, 0.0, 1.0);
+  v2 = constrain(v2, 0.0, 1.0);
+  v3 = constrain(v3, 0.0, 1.0);
+  double a = 1.0;
+  ctx->fillColor.v1 = v1;
+  ctx->fillColor.v2 = v2;
+  ctx->fillColor.v3 = v3;
+  ctx->fillColor.a = a;
   ctx->drawable->fill(ctx, v1, v2, v3);
 }
 
 extern void stroke(SketchContext *ctx, double v1, double v2, double v3) {
   ctx->fill = true;
+  v1 = constrain(v1, 0.0, 1.0);
+  v2 = constrain(v2, 0.0, 1.0);
+  v3 = constrain(v3, 0.0, 1.0);
+  double a = 1.0;
+  ctx->strokeColor.v1 = v1;
+  ctx->strokeColor.v2 = v2;
+  ctx->strokeColor.v3 = v3;
   ctx->drawable->stroke(ctx, v1, v2, v3);
 }
 

@@ -171,12 +171,12 @@ static void darwin_background(SketchContext *ctx, double v1, double v2, double v
 
 static void darwin_fill(SketchContext *ctx, double v1, double v2, double v3) {
   CGContextRef cgCtx = ctx->drawable->implData;
-  CGContextSetRGBFillColor(cgCtx, constrain(v1, 0.0, 255.0) / 255, constrain(v2, 0.0, 255.0) / 255, constrain(v3, 0.0, 255.0) / 255, 1.0);
+  CGContextSetRGBFillColor(cgCtx, v1, v2, v3, 1.0);
 }
 
 static void darwin_stroke(SketchContext *ctx, double v1, double v2, double v3) {
   CGContextRef cgCtx = ctx->drawable->implData;
-  CGContextSetRGBStrokeColor(cgCtx, constrain(v1, 0.0, 255.0) / 255, constrain(v2, 0.0, 255.0) / 255, constrain(v3, 0.0, 255.0) / 255, 1.0);
+  CGContextSetRGBStrokeColor(cgCtx, v1, v2, v3, 1.0);
 }
 
 static void darwin_smooth(SketchContext *ctx) {
@@ -209,6 +209,8 @@ extern Drawable *SoftwareDrawable() {
   drawable->smooth = darwin_smooth;
   drawable->noSmooth = darwin_noSmooth;
 
+  drawable->implData = NULL;
+  
   return drawable;
 }
 
