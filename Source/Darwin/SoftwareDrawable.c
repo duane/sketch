@@ -1,6 +1,7 @@
 #include <sketch.h>
 #include <stdlib.h>
-#import <Cocoa/Cocoa.h>
+
+#include <ApplicationServices/ApplicationServices.h>
 
 static inline CGPathDrawingMode drawingMode(SketchContext *ctx) {
   if (ctx->stroke && ctx->fill)
@@ -86,7 +87,7 @@ static void darwin_point(SketchContext *ctx, double x, double y) {
   if (!(ctx->stroke || ctx->fill))
     return;
   CGContextRef cgCtx = ctx->drawable->implData;
-  NSRect pointRect = NSMakeRect(x - 0.5, y - 0.5, 1.0, 1.0);
+  CGRect pointRect = CGRectMake(x - 0.5, y - 0.5, 1.0, 1.0);
   CGContextFillRect(cgCtx, pointRect);
 }
 
@@ -136,7 +137,7 @@ static void darwin_rect(SketchContext *ctx, double x, double y, double width, do
       yLen = height - y;
       break;
   }
-  NSRect rect = NSMakeRect(xPrime, yPrime, xLen, yLen);
+  CGRect rect = CGRectMake(xPrime, yPrime, xLen, yLen);
   
   CGContextAddRect(cgCtx, rect);
   CGContextDrawPath(cgCtx, drawingMode(ctx));
@@ -166,7 +167,7 @@ static void darwin_background(SketchContext *ctx, double v1, double v2, double v
   CGContextRef cgCtx = ctx->drawable->implData;
   CGContextSaveGState(cgCtx);
   CGContextSetRGBFillColor(cgCtx, constrain(v1, 0.0, 255.0) / 255, constrain(v2, 0.0, 255.0) / 255, constrain(v3, 0.0, 255.0) / 255, 1.0);
-  CGContextFillRect(cgCtx, NSMakeRect(0, 0, ctx->width, ctx->height));
+  CGContextFillRect(cgCtx, CGRectMake(0, 0, ctx->width, ctx->height));
   CGContextRestoreGState(cgCtx);
 }
 
