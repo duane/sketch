@@ -16,7 +16,7 @@
   NSRect windowRect = NSMakeRect(x, y, context->width, context->height);
   window = [[[NSWindow alloc] initWithContentRect: windowRect styleMask: (NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing: NSBackingStoreBuffered defer: YES] retain];
   [window setDelegate: self];
-  
+
   sketchView = [[SketchView alloc] initWithFrame: windowRect sketchContext: context];
   [window setContentView: sketchView];
 

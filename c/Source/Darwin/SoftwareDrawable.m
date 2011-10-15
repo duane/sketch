@@ -137,7 +137,8 @@ static void darwin_rect(SketchContext *ctx, double x, double y, double width, do
       break;
   }
   NSRect rect = NSMakeRect(xPrime, yPrime, xLen, yLen);
-
+  
+  CGContextAddRect(cgCtx, rect);
   CGContextDrawPath(cgCtx, drawingMode(ctx));
 }
 

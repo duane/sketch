@@ -6,6 +6,11 @@
   SketchContext *context;
   BOOL needsInit;
   NSTimer *timer;
+  NSTrackingArea *tracking;
+
+  // event-related state
+  BOOL mouseMoved, mouseDragged;
+  NSPoint mouse;
 }
 
 - (id)initWithFrame:(NSRect) frame sketchContext:(SketchContext*) ctx;

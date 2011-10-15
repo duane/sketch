@@ -4,10 +4,23 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-const static uint32_t CENTER = 0;
-const static uint32_t RADIUS = 1;
-const static uint32_t CORNER = 2;
-const static uint32_t CORNERS = 3;
+// Core Macros
+const static uint32_t CENTER = 1;
+const static uint32_t RADIUS = 2;
+const static uint32_t CORNER = 3;
+const static uint32_t CORNERS = 4;
+
+const static uint32_t RIGHT = 5;
+const static uint32_t LEFT = 6;
+
+
+typedef enum {
+  MousePressed,
+  MouseReleased,
+  MouseClicked,
+  MouseMoved,
+  MouseDragged
+} MouseEvent;
 
 struct SketchContext;
 
@@ -40,6 +53,12 @@ typedef struct SketchContext {
   Drawable *drawable;
   void (*setup)(struct SketchContext*);
   void (*draw)(struct SketchContext*);
+
+  void (*mouseClicked)(struct SketchContext*);
+  void (*mouseDragged)(struct SketchContext*);
+  void (*mouseMoved)(struct SketchContext*);
+  void (*mousePressedf)(struct SketchContext*);
+  void (*mouseReleased)(struct SketchContext*);
  
   uint32_t width, height;
   uint32_t ellipseMode, rectMode; 
@@ -47,10 +66,15 @@ typedef struct SketchContext {
   bool fill, stroke;
 
   Color strokeColor, fillColor;
+  
+  double mouseX, mouseY, pmouseX, pmouseY;
+  uint32_t mouseButton;
+  bool mousePressed;
 } SketchContext;
 
 extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, uint32_t height, void (*setup)(SketchContext*), void (*draw)(SketchContext*));
 extern Drawable *SoftwareDrawable(void);
+extern void RegisterMouse(SketchContext *ctx, MouseEvent event, void (*mouseCallback)(SketchContext*));
 
 extern void RunSketch(SketchContext *context);
 

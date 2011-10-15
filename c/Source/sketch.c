@@ -1,6 +1,8 @@
 #include <sketch.h>
 #include <stdlib.h>
 
+static inline void empty(SketchContext *ctx) {}
+
 extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, uint32_t height, void (*setup)(SketchContext*), void (*draw)(SketchContext*)) {
   SketchContext *context = malloc(sizeof(SketchContext));
   context->width = width;
@@ -14,7 +16,30 @@ extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, ui
  
   context->stroke = context->fill = true;
 
+  context->mousePressedf = context->mouseReleased = context->mouseClicked = context->mouseMoved = context->mouseDragged = empty;
+  
   return context;
+}
+
+extern void RegisterMouse(SketchContext *ctx, MouseEvent event, void (*mouseCallback)(SketchContext*)) {
+  switch(event) {
+    case MousePressed:
+      ctx->mousePressedf = mouseCallback;
+      break;
+    case MouseReleased:
+      ctx->mouseReleased = mouseCallback;
+      break;
+    case MouseClicked:
+      ctx->mouseClicked = mouseCallback;
+      break;
+    case MouseMoved:
+      ctx->mouseMoved = mouseCallback;
+    case MouseDragged:
+      ctx->mouseDragged = mouseCallback;
+      break;
+    default:
+      break;
+  }
 }
 
 extern void ellipse(SketchContext *ctx, double x, double y, double width, double height) {
@@ -71,6 +96,7 @@ extern void stroke(SketchContext *ctx, double v1, double v2, double v3) {
   ctx->strokeColor.v1 = v1;
   ctx->strokeColor.v2 = v2;
   ctx->strokeColor.v3 = v3;
+  ctx->strokeColor.a = a;
   ctx->drawable->stroke(ctx, v1, v2, v3);
 }
 
