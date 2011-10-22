@@ -2,6 +2,8 @@
 #define __C_INCLUDE_INTERNAL_H__
 #include <sketch.h>
 
+extern void doSetup(SketchContext *ctx);
+
 // events
 static inline void sendMouseDown(SketchContext *ctx, uint32_t button) {
   ctx->mousePressed = true;

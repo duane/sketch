@@ -1,7 +1,7 @@
 #include <sketch.h>
 #include <stdlib.h>
 
-static inline void empty(SketchContext *ctx) {}
+static void empty(SketchContext *ctx) {}
 
 extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, uint32_t height, void (*setup)(SketchContext*), void (*draw)(SketchContext*)) {
   SketchContext *context = malloc(sizeof(SketchContext));
@@ -58,6 +58,22 @@ extern void RegisterKey(SketchContext *ctx, KeyEvent event, void (*keyCallback)(
     default:
       break;
   }
+}
+
+extern double min(double a, double b) {
+  return a < b ? a : b;
+}
+
+extern double max(double a, double b) {
+  return a > b ? a : b;
+}
+
+extern double constrain(double v, double lower, double upper) {
+  if (v < lower)
+    return lower;
+  if (v > upper)
+    return upper;
+  return v;
 }
 
 extern void ellipse(SketchContext *ctx, double x, double y, double width, double height) {
@@ -118,6 +134,14 @@ extern void stroke(SketchContext *ctx, double v1, double v2, double v3) {
   ctx->drawable->stroke(ctx, v1, v2, v3);
 }
 
+extern void noFill(SketchContext *ctx) {
+  ctx->fill = false;
+}
+
+extern void noStroke(SketchContext *ctx) {
+  ctx->stroke = false;
+}
+
 extern void smooth(SketchContext *ctx) {
   ctx->drawable->smooth(ctx);
 }
@@ -126,8 +150,27 @@ extern void noSmooth(SketchContext *ctx) {
   ctx->drawable->noSmooth(ctx);
 }
 
+extern void ellipseMode(SketchContext *ctx, uint32_t mode) {
+  if (mode > CORNERS)
+    mode = CENTER;
+  ctx->ellipseMode = mode;
+}
+
+extern void rectMode(SketchContext *ctx, uint32_t mode) {
+  if (mode > CORNERS)
+    mode = CORNER;
+  ctx->rectMode = mode;
+}
+
 extern void background(SketchContext *ctx, double v1, double v2, double v3) {
   ctx->drawable->background(ctx, v1, v2, v3);
+}
+
+extern double bezierPoint(double a, double b, double c, double d, double t) {
+// B(t) = (1-t)^(3)P_0 + 3(1-t)^(2)tP_1 + 3(1-t)t^(2)P_2 + t^(3)P_3
+  double t2 = t * t;
+  double t3 = t2 * t;
+  return ((-t3 + 3 * t2 - 3 * t + 1) * a) + (3 * (t2 - 2 * t + 1) * t * b) + (3 * (1 - t) * t2 * c) + (t3 * d);
 }
 
 extern void doSetup(SketchContext *ctx) {
