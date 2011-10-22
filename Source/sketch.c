@@ -17,7 +17,12 @@ extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, ui
   context->stroke = context->fill = true;
 
   context->mousePressedf = context->mouseReleased = context->mouseClicked = context->mouseMoved = context->mouseDragged = empty;
+  context->mousePressed = false;
   
+  
+  context->keyPressedf = context->keyReleased = context->keyTyped = empty;
+  context->keyPressed = false;  
+
   return context;
 }
 
@@ -36,6 +41,19 @@ extern void RegisterMouse(SketchContext *ctx, MouseEvent event, void (*mouseCall
       ctx->mouseMoved = mouseCallback;
     case MouseDragged:
       ctx->mouseDragged = mouseCallback;
+      break;
+    default:
+      break;
+  }
+}
+
+extern void RegisterKey(SketchContext *ctx, KeyEvent event, void (*keyCallback)(SketchContext*)) {
+  switch(event) {
+    case KeyPressed:
+      ctx->keyPressedf = keyCallback;
+      break;
+    case KeyReleased:
+      ctx->keyReleased = keyCallback;
       break;
     default:
       break;
