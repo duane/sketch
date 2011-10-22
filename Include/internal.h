@@ -33,4 +33,25 @@ static inline void advanceMouseFrame(SketchContext *ctx) {
   ctx->pmouseY = ctx->mouseY;
 }
 
+static inline void sendKeyDown(SketchContext *ctx, char key, uint32_t unicodeKey, uint32_t keyCode, bool repeat) {
+  ctx->key = key;
+  ctx->unicodeKey = unicodeKey;
+  ctx->keyCode = keyCode;
+  if (!repeat
+      || keyCode == sVK_Up
+      || keyCode == sVK_Down
+      || keyCode == sVK_Left
+      || keyCode == sVK_Right) {
+    ctx->keyPressed = true;
+    ctx->keyPressedf(ctx);
+  }
+  if (key != CODED)
+    ctx->keyTyped(ctx);
+}
+
+static inline void sendKeyUp(SketchContext *ctx) {
+  ctx->keyPressed = false;
+  ctx->keyReleased(ctx);
+}
+
 #endif

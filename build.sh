@@ -1,6 +1,6 @@
 OPT="-O0 -g"
 FLAGS="-Wall -Wextra -Werror -Wno-unused-parameter"
-INCLUDE="-I./Include"
+INCLUDE="-I./Include -I/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/"
 CC="clang"
 $CC $INCLUDE $OPT $FLAGS Source/Darwin/DarwinMain.m -c -o build/DarwinMain.o || exit 1
 $CC $INCLUDE $OPT $FLAGS Source/Darwin/SketchApplicationDelegate.m -c -o build/SketchApplicationDelegate.o || exit 1
