@@ -3,7 +3,7 @@
 @implementation SketchApplicationDelegate : NSObject
 
 - (id)initWithSketchContext: (SketchContext*)ctx {
-  if (self = [super init]) {
+  if ((self = [super init])) {
     context = ctx;
   }
   return self;

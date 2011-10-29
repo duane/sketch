@@ -7,15 +7,8 @@
 // Core constants
 
 
-const static uint32_t CENTER = 1;
-const static uint32_t RADIUS = 2;
-const static uint32_t CORNER = 3;
-const static uint32_t CORNERS = 4;
 
 
-// These are defined as macros because they are typeless.
-#define CODED 0x80
-#define UNICODED 0x81
 
 typedef enum {
   MousePressed,
@@ -87,19 +80,27 @@ enum {
   sVK_Other = 0x29,
 };
 
-const static uint32_t RIGHT = sVK_Right;
-const static uint32_t LEFT = sVK_Left;
 
-const static uint32_t UP = sVK_Up;
-const static uint32_t DOWN = sVK_Down;
-
-const static uint32_t BACKSPACE = sVK_Delete;
-const static uint32_t TAB = sVK_Tab;
-const static uint32_t ENTER = sVK_Enter;
-const static uint32_t RETURN = sVK_Return;
-const static uint32_t SPACE = sVK_Space;
-const static uint32_t ESC = sVK_Escape;
-const static uint32_t DELETE = sVK_ForwardDelete;
+enum {
+  CENTER = 1,
+  RADIUS = 2,
+  CORNER = 3,
+  CORNERS = 4,
+  CODED = 0x80,
+  UNICODED = 0x81,
+  RIGHT = sVK_Right,
+  LEFT = sVK_Left,
+  UP = sVK_Up,
+  DOWN = sVK_Down,
+  
+  BACKSPACE = sVK_Delete,
+  TAB = sVK_Tab,
+  ENTER = sVK_Enter,
+  RETURN = sVK_Return,
+  SPACE = sVK_Space,
+  ESC = sVK_Escape,
+  DELETE = sVK_ForwardDelete,
+};
 
 
 struct SketchContext;
@@ -156,7 +157,7 @@ typedef struct SketchContext {
   bool mousePressed;
 
   bool keyPressed;
-  char key;
+  uint8_t key;
   uint32_t unicodeKey;
   uint32_t keyCode;
 } SketchContext;
