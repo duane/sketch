@@ -1,6 +1,6 @@
 #import "SketchView.h"
 
-#include <Events.h> // HIToolbox, for key codes.
+#include <Carbon/Carbon.h> // for key event codes
 
 #include <internal.h>
 
@@ -8,7 +8,7 @@
 @implementation SketchView
 
 - (id)initWithFrame:(NSRect) frame sketchContext:(SketchContext*)ctx{
-  if (self = [super initWithFrame: frame]) {
+  if ((self = [super initWithFrame: frame])) {
     context = ctx;
     needsInit = YES;
 

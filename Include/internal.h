@@ -35,7 +35,7 @@ static inline void advanceMouseFrame(SketchContext *ctx) {
   ctx->pmouseY = ctx->mouseY;
 }
 
-static inline void sendKeyDown(SketchContext *ctx, char key, uint32_t unicodeKey, uint32_t keyCode, bool repeat) {
+static inline void sendKeyDown(SketchContext *ctx, uint8_t key, uint32_t unicodeKey, uint32_t keyCode, bool repeat) {
   ctx->key = key;
   ctx->unicodeKey = unicodeKey;
   ctx->keyCode = keyCode;
