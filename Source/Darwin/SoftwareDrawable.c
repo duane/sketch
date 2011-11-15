@@ -191,6 +191,20 @@ static void darwin_noSmooth(SketchContext *ctx) {
   CGContextSetShouldAntialias(cgCtx, false);
 }
 
+static void darwin_CreateSImage(SketchContext *ctx, SImage *image) {
+  CGColorSpaceRef cgColorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef imageContext = CGBitmapContextCreate(image->buf, image->width, image->height, 8, 4 * image->width, cgColorSpace, kCGImageAlphaNoneSkipLast);
+  CFRelease(cgColorSpace);
+  CGImageRef cgImage = CGBitmapContextCreateImage(imageContext);
+  assert(cgImage);
+  image->impl = cgImage;
+}
+
+static void darwin_image(SketchContext *ctx, SImage image, double x, double y, double width, double height) {
+  CGContextRef cgCtx = ctx->drawable->implData;
+  CGContextDrawImage(cgCtx, CGRectMake(x, y, width, height), image.impl);
+}
+
 extern Drawable *SoftwareDrawable() {
   Drawable *drawable = malloc(sizeof(Drawable));
   
@@ -210,6 +224,9 @@ extern Drawable *SoftwareDrawable() {
   
   drawable->smooth = darwin_smooth;
   drawable->noSmooth = darwin_noSmooth;
+
+  drawable->CreateSImage = darwin_CreateSImage;
+  drawable->image = darwin_image;
 
   drawable->implData = NULL;
   

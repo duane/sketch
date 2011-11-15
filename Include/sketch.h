@@ -1,14 +1,9 @@
 #ifndef __INCLUDE_CONTEXT_H__
 #define __INCLUDE_CONTEXT_H__
 
-#include <stdint.h>
 #include <stdbool.h>
-
-// Core constants
-
-
-
-
+#include <stdint.h>
+#include <stdlib.h>
 
 typedef enum {
   MousePressed,
@@ -105,6 +100,19 @@ enum {
 
 struct SketchContext;
 
+typedef enum {
+  RGB,
+  //ARGB,
+  //ALPHA,
+} ImageFormat;
+
+typedef struct {
+  uint8_t *buf;
+  size_t width, height;
+  ImageFormat format;
+  void *impl;
+} SImage;
+
 typedef struct {
   void (*ellipse)(struct SketchContext*, double, double, double, double);
   void (*arc)(struct SketchContext*, double, double, double, double, double, double);
@@ -122,6 +130,9 @@ typedef struct {
 
   void (*smooth)(struct SketchContext*);
   void (*noSmooth)(struct SketchContext*);
+
+  void (*CreateSImage)(struct SketchContext *ctx, SImage *image);
+  void (*image)(struct SketchContext *ctx, SImage image, double x, double y, double width, double height);
 
   void *implData;
 } Drawable;
@@ -195,4 +206,12 @@ extern void background(SketchContext *ctx, double v1, double v2, double v3);
 extern double min(double a, double b);
 extern double max(double a, double b);
 extern double constrain(double v, double lower, double upper);
+
+extern SImage CreateSImage(SketchContext *ctx, uint8_t *buf, size_t width, size_t height, ImageFormat format);
+extern void image(SketchContext *ctx, SImage image, double x, double y);
+
+static inline size_t BytesPerPixel(ImageFormat format) {
+  return 3;
+}
+
 #endif

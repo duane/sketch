@@ -60,6 +60,20 @@ extern void RegisterKey(SketchContext *ctx, KeyEvent event, void (*keyCallback)(
   }
 }
 
+extern SImage CreateSImage(SketchContext *ctx, uint8_t *buf, size_t width, size_t height, ImageFormat format) {
+  SImage image;
+  image.buf = buf;
+  image.width = width;
+  image.height = height;
+  image.format = format;
+  ctx->drawable->CreateSImage(ctx, &image);
+  return image;
+}
+
+extern void image(SketchContext *ctx, SImage image, double x, double y) {
+  ctx->drawable->image(ctx, image, x, y, image.width, image.height);
+}
+
 extern double min(double a, double b) {
   return a < b ? a : b;
 }

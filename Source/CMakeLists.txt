@@ -9,4 +9,6 @@ endif("${CMAKE_SYSTEM_NAME}" STREQUAL Darwin)
 
 message(STATUS "Sketch lib sources: ${SKETCH_LIB_SOURCES}")
 
-add_library(sketch ${SKETCH_LIB_SOURCES})
+add_library(sketch SHARED ${SKETCH_LIB_SOURCES})
+find_library(COCOA_FRAMEWORK Cocoa)
+target_link_libraries(sketch ${COCOA_FRAMEWORK})
