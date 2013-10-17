@@ -1,6 +1,8 @@
 #include <sketch.h>
 #include <stdlib.h>
 
+#include <assert.h>
+
 static void empty(SketchContext *ctx) {}
 
 extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, uint32_t height, void (*setup)(SketchContext*), void (*draw)(SketchContext*)) {
@@ -60,18 +62,19 @@ extern void RegisterKey(SketchContext *ctx, KeyEvent event, void (*keyCallback)(
   }
 }
 
-extern SImage CreateSImage(SketchContext *ctx, uint8_t *buf, size_t width, size_t height, ImageFormat format) {
-  SImage image;
-  image.buf = buf;
-  image.width = width;
-  image.height = height;
-  image.format = format;
-  ctx->drawable->CreateSImage(ctx, &image);
+extern SImage *CreateSImage(SketchContext *ctx, uint8_t *buf, size_t width, size_t height, ImageFormat format) {
+  SImage *image = malloc(sizeof(SImage));
+  assert(image);
+  image->buf = buf;
+  image->width = width;
+  image->height = height;
+  image->format = format;
+  ctx->drawable->CreateSImage(ctx, image);
   return image;
 }
 
-extern void image(SketchContext *ctx, SImage image, double x, double y) {
-  ctx->drawable->image(ctx, image, x, y, image.width, image.height);
+extern void image(SketchContext *ctx, SImage *image, double x, double y) {
+  ctx->drawable->image(ctx, image, x, y, image->width, image->height);
 }
 
 extern double min(double a, double b) {

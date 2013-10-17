@@ -192,17 +192,24 @@ static void darwin_noSmooth(SketchContext *ctx) {
 }
 
 static void darwin_CreateSImage(SketchContext *ctx, SImage *image) {
+  uint8_t *newBuf = malloc(4 * image->width * image->height);
+  for (size_t i = 0; i < image->width * image->height; i++) {
+    newBuf[i * 4] = image->buf[i * 3];
+    newBuf[i * 4 + 1] = image->buf[i * 3 + 1];
+    newBuf[i * 4 + 2] = image->buf[i * 3 + 2];
+  }
+
   CGColorSpaceRef cgColorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef imageContext = CGBitmapContextCreate(image->buf, image->width, image->height, 8, 4 * image->width, cgColorSpace, kCGImageAlphaNoneSkipLast);
+  CGContextRef imageContext = CGBitmapContextCreate(newBuf, image->width, image->height, 8, 4 * image->width, cgColorSpace, kCGImageAlphaNoneSkipLast);
   CFRelease(cgColorSpace);
   CGImageRef cgImage = CGBitmapContextCreateImage(imageContext);
   assert(cgImage);
   image->impl = cgImage;
 }
 
-static void darwin_image(SketchContext *ctx, SImage image, double x, double y, double width, double height) {
+static void darwin_image(SketchContext *ctx, SImage *image, double x, double y, double width, double height) {
   CGContextRef cgCtx = ctx->drawable->implData;
-  CGContextDrawImage(cgCtx, CGRectMake(x, y, width, height), image.impl);
+  CGContextDrawImage(cgCtx, CGRectMake(x, y, width, height), image->impl);
 }
 
 extern Drawable *SoftwareDrawable() {

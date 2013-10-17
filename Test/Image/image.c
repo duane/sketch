@@ -3,10 +3,10 @@
 #include <stdlib.h>
 
 uint8_t *buf = NULL;
-SImage img;
+SImage *img;
 
 void setup(SketchContext *ctx) {
-  const size_t size = ctx->width * ctx->height * 4;
+  const size_t size = ctx->width * ctx->height * 3;
   buf = malloc(size);
   for (unsigned i = 0; i < size; i++) {
     buf[i] = random() % 256;

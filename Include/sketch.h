@@ -100,11 +100,13 @@ enum {
 
 struct SketchContext;
 
-typedef enum {
-  RGB,
-  //ARGB,
-  //ALPHA,
-} ImageFormat;
+enum {
+  RGB = 0,
+  ARGB = 1,
+  ALPHA = 2,
+};
+
+typedef uint32_t ImageFormat;
 
 typedef struct {
   uint8_t *buf;
@@ -132,14 +134,14 @@ typedef struct {
   void (*noSmooth)(struct SketchContext*);
 
   void (*CreateSImage)(struct SketchContext *ctx, SImage *image);
-  void (*image)(struct SketchContext *ctx, SImage image, double x, double y, double width, double height);
+  void (*image)(struct SketchContext *ctx, SImage *image, double x, double y, double width, double height);
 
   void *implData;
 } Drawable;
 
 typedef struct {
   double v1, v2, v3, a;
-} color;
+} color __attribute__ ((aligned (8)));
 
 typedef struct SketchContext {
   Drawable *drawable;
@@ -171,7 +173,7 @@ typedef struct SketchContext {
   uint8_t key;
   uint32_t unicodeKey;
   uint32_t keyCode;
-} SketchContext;
+} SketchContext __attribute__ ((aligned (8)));
 
 extern SketchContext *CreateSketchContext(Drawable *drawable, uint32_t width, uint32_t height, void (*setup)(SketchContext*), void (*draw)(SketchContext*));
 extern Drawable *SoftwareDrawable(void);
@@ -207,8 +209,8 @@ extern double min(double a, double b);
 extern double max(double a, double b);
 extern double constrain(double v, double lower, double upper);
 
-extern SImage CreateSImage(SketchContext *ctx, uint8_t *buf, size_t width, size_t height, ImageFormat format);
-extern void image(SketchContext *ctx, SImage image, double x, double y);
+extern SImage *CreateSImage(SketchContext *ctx, uint8_t *buf, size_t width, size_t height, ImageFormat format);
+extern void image(SketchContext *ctx, SImage *image, double x, double y);
 
 static inline size_t BytesPerPixel(ImageFormat format) {
   return 3;
