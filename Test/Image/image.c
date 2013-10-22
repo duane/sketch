@@ -1,6 +1,7 @@
 #include <sketch.h>
 
 #include <stdlib.h>
+#include <time.h>
 
 uint8_t *buf = NULL;
 SImage *img;
@@ -8,6 +9,7 @@ SImage *img;
 void setup(SketchContext *ctx) {
   const size_t size = ctx->width * ctx->height * 3;
   buf = malloc(size);
+  srandom(time(NULL));
   for (unsigned i = 0; i < size; i++) {
     buf[i] = random() % 256;
   }
